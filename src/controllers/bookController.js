@@ -134,6 +134,7 @@ const getBooks = async function (req, res) {
 const getBookDetailsById = async function (req, res) {
     try {
         data = req.params.bookId
+
         //console.log(data)
 
         if (!isValid(data)) {
@@ -144,28 +145,25 @@ const getBookDetailsById = async function (req, res) {
             return res.status(400).send({ status: false, msg: "path param is not in valid format" })
         }
 
-        bookDetails = await bookModel.findOne({ _id: data, isDeleted: false })
+
+
+        let Book = await bookModel.findOne({ _id: data, isDeleted: false })
         // console.log(bookDetails)
-        if (!bookDetails) {
+        if (!Book) {
             return res.status(400).send({ status: false, msg: "no book found/alredy deleted" })
         }
 
-        const reviewer = await reviewModel.find({ bookId: data, isDeleted: false })
-
-        //console.log(bookDetails)
-        //console.log(reviewer)
-
-        const { ...data1 } = bookDetails
+        let reviewData = await reviewModel.find({ bookId: data, isDeleted: false })
+        const { ...data1 } = Book
         data1._doc.reviewsData = reviewer
+        // bookData.reviewsData.push(reviewer)
+
 
         // bookDetails.reviewsData = reviewer
 
         // console.log(bookDetails)
+
         return res.status(200).send({ status: false, msg: "done", data: data1._doc })
-
-
-
-
 
     } catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
@@ -315,4 +313,4 @@ module.exports.createBook = createBook
 module.exports.getBooks = getBooks
 module.exports.getBookDetailsById = getBookDetailsById
 module.exports.updateBooks = updateBooks
-module.exports.deleteBooks=deleteBooks
+module.exports.deleteBooks = deleteBooks

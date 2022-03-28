@@ -148,6 +148,10 @@ const updateReview = async function (req, res) {
                 return res.status(400).send({ status: false, msg: "rating is not in valid format" })
             }
 
+            if(rating < 1 || rating >5){
+                return res.status(400).send({status : false, msg : "rating should be in between 1 to 5"})
+            }
+
             obj.rating = rating
         }
 
@@ -178,7 +182,74 @@ const updateReview = async function (req, res) {
 }
 
 
+const deleteReview = async function(req, res){
+    try{
+
+        bookId = req.params.bookId
+        reviewId = req.params.reviewId
+
+        if (!isValid(bookId)) {
+            return res.status(400).send({ status: false, msg: "book id is not valid" })
+        }
+
+        if (!isValidObjectId(bookId)) {
+            return res.status(400).send({ status: false, msg: "book id is not in valid format" })
+        }
+
+        const checkbookIdExist = await bookModel.findById({ _id: bookId })
+        if (!checkbookIdExist) {
+            return res.status(400).send({ status: false, msg: "book you are searching does not exist" })
+        }
+
+        if (checkbookIdExist.isDeleted == true) {
+            return res.status(400).send({ status: false, msg: "book is already deleted" })
+        }
+
+        if (!isValid(reviewId)) {
+            return res.status(400).send({ status: false, msg: " review id is not valid" })
+        }
+
+        if (!isValidObjectId(reviewId)) {
+            return res.status(400).send({ status: false, msg: "review id is not in valid format" })
+        }
+
+        const checkReviewIdExist = await reviewModel.findById({ _id: reviewId })
+        if (!checkReviewIdExist) {
+            return rse.status(400).send({ status: false, msg: "review does not exist" })
+        }
+
+        if (checkReviewIdExist.isDeleted == true) {
+            return res.status(400).send({ status: false, msg: "review is already deleted" })
+        }
+
+
+
+       const deletedReview = await reviewModel.findOneAndUpdate(
+           {_id : reviewId},
+           {$set : {isDeleted:true}}
+
+
+       )
+
+       const decreaseReviewValue = await bookModel.findOneAndUpdate(
+           {_id : bookId},
+           {$inc : {reviews : -1}},
+           {new : true}
+       )
+
+       return res.status(200).send({status : true, msg : "Updated", data:decreaseReviewValue })
+
+       
+        
+
+    }catch(err){
+        return res.status(400).send({status :false, msg : err.message})
+    }
+}
+
+
 
 
 module.exports.reviewer = reviewer
 module.exports.updateReview=updateReview
+module.exports.deleteReview=deleteReview
