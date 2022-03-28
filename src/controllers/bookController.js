@@ -192,9 +192,9 @@ const updateBooks = async function (req, res) {
             return res.status(400).send({ status: false, msg: "book id is not valid" })
         }
 
-        const isBookexist = await bookModel.findOne({ _id: bookId })
+        const isBookexist = await bookModel.findOne({ _id: bookId, isDeleted: false })
         if (!isBookexist) {
-            return res.status(400).send({ status: false, msg: "no book exist with this id" })
+            return res.status(400).send({ status: false, msg: "no book exist with this id/may be revomed from server" })
         }
 
         if (Object.keys(data).length == 0) {
@@ -210,9 +210,9 @@ const updateBooks = async function (req, res) {
             if (!isValid(title)) {
                 return res.status.send({ status: false, msg: "title you want to update is not valid " })
             }
-            const checkIsUnique = await bookModel.find(title)  //object shorthand property
-            if (checkIsUnique.length == 0) {
-                return checkIsUnique.status(400).send({ status: false, msg: "title you want to update is already present in dataBase" })
+            const checkIsUnique = await bookModel.find({ title: title })  //object shorthand property
+            if (checkIsUnique.length > 0) {
+                return res.status(400).send({ status: false, msg: "title you want to update is already present in dataBase" })
             }
 
             obj.title = title
@@ -239,29 +239,22 @@ const updateBooks = async function (req, res) {
                 return res.status(400).send({ status: false, msg: "ISBN you want to update is not valid" })
             }
 
-            checkIsbnIsUnique = await bookModel.find(ISBN)
-            if (checkIsbnIsUnique.length == 0) {
+            checkIsbnIsUnique = await bookModel.find({ ISBN: ISBN })
+            if (checkIsbnIsUnique.length > 0) {
                 return res.status(400).send({ status: false, msg: "ISBN you want to update is already taken" })
             }
 
             obj.ISBN = ISBN
         }
+        console.log(obj)
 
+        const updatingBook = await bookModel.findOneAndUpdate(
+            { _id: bookId },
+           {$set : obj},// {$set :{ title:obj.title, excerpt : obj.excerpt , releasedAt:obj.releasedAt, ISBN:obj.ISBN }},
+            {new : true}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        )
+        return res.status(200).send({ status: false, msg: "Updated", data: updatingBook })
 
 
 
