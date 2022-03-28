@@ -24,5 +24,9 @@ router.get("/books/:bookId", bookController.getBookDetailsById)
 
 router.put("//books/:bookId", bookController.updateBooks)
 
+router.delete("/books/:bookId", bookController.deleteBooks)
+
+router.put("/books/:bookId/review/:reviewId", reviewController.updateReview)
+
 
 module.exports = router;

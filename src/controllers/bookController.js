@@ -158,14 +158,9 @@ const getBookDetailsById = async function (req, res) {
         const { ...data1 } = bookDetails
         data1._doc.reviewsData = reviewer
 
-
-
-
-
         // bookDetails.reviewsData = reviewer
 
         // console.log(bookDetails)
-
         return res.status(200).send({ status: false, msg: "done", data: data1._doc })
 
 
@@ -250,8 +245,8 @@ const updateBooks = async function (req, res) {
 
         const updatingBook = await bookModel.findOneAndUpdate(
             { _id: bookId },
-           {$set : obj},// {$set :{ title:obj.title, excerpt : obj.excerpt , releasedAt:obj.releasedAt, ISBN:obj.ISBN }},
-            {new : true}
+            { $set: obj },// {$set :{ title:obj.title, excerpt : obj.excerpt , releasedAt:obj.releasedAt, ISBN:obj.ISBN }},
+            { new: true }
 
         )
         return res.status(200).send({ status: false, msg: "Updated", data: updatingBook })
@@ -269,9 +264,55 @@ const updateBooks = async function (req, res) {
 
 
 
+const deleteBooks = async function (req, res) {
+    try {
+
+        bookId = req.params.bookId
+        console.log(bookId)
+
+        if (!isValid(bookId)) {
+            return res.status(400).send({ status: false, msg: "book id is not valid" })
+        }
+
+        if (!isValidObjectId(bookId)) {
+            return res.status(400).send({ status: false, msg: "Book id is not in valid format" })
+        }
+
+        checkBookIdExist = await bookModel.findById({ _id: bookId })
+        if (!checkBookIdExist) {
+            return res.status(404).send({ status: false, msg: "id does not exist" })
+        }
+
+        if (checkBookIdExist.isDeleted == true) {
+            return res.status(404).send({ status: false, msg: "book is already deleted" })
+        }
+
+        const updateIsDeleted = await bookModel.findOneAndUpdate(
+            { _id: bookId },
+            { $set: { isDeleted: true } }
+        )
+
+        return res.status(200).send({ status: false, msg: "Updated" })
+
+
+    } catch (err) {
+        return res.status(500).send({ status: false, msg: err.message })
+    }
+
+}
+
+
+
+
+
+
+
+
+
 
 
 module.exports.createBook = createBook
 module.exports.getBooks = getBooks
 module.exports.getBookDetailsById = getBookDetailsById
 module.exports.updateBooks = updateBooks
+module.exports.deleteBooks=deleteBooks
