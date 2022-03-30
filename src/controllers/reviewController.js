@@ -67,13 +67,15 @@ const reviewer = async function (req, res) {
         }
 
 
-        const checkbookIdexist = await bookModel.findOne({ _id: bookId, isDeletd: false })
+        const checkbookIdexist = await bookModel.findOne({ _id: bookId, isDeleted: false })
+        console.log(checkbookIdexist)
         if (!checkbookIdexist) {
             return res.status(400).send({ status: false, msg: "no book record found with this id/book ypu are searching is alredy deleted" })
 
         }
 
         const reviewGenerated = await reviewModel.create(data)
+
         obj = await bookModel.findOneAndUpdate(
             { _id: bookId },
             { $inc: { reviews: 1 } },

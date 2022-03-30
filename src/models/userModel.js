@@ -31,8 +31,8 @@ const userSchema = new mongoose.Schema({
         trim: true,
         required :[true,'Phone no. is required'],
         unique : true,
-        minlength : [10, 'minimum phone length should be 10'],
-        maxlength : [10, 'maximum length should also be 10'],
+        minLength : [10, 'minimum phone length should be 10'],
+        maxLength : [10, 'maximum length should also be 10'],
         validate : {
             validator : function(phone) {
                 return /^[0-9]{10}$/.test(phone)
@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema({
     
         required : [true, "password is missing"],
         minLength : [8, 'minimum length shoulb be 8'],
-        maxLength: [15, 'maximum length should be 15']
+        maxLength : [15, 'maximum length should be 15']
 
     },
     address : {

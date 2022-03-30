@@ -15,14 +15,17 @@ const createReview = new mongoose.Schema({
     },
     reviewedAt : {
         type : Date,
+        default: Date.now()
+    
         
     },
 
     rating : {
         type : Number,
+        min:[1, "minimum rating should be 1"],
+        max : [5, "maximum rating should not be greater than 5"],
         required: true,
-        minlength:[1, "minimum rating should be 1"],
-        maxLength : [5, "maximum rating should not be greater than 5"]
+      
 
     },
     review: {

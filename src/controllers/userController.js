@@ -9,6 +9,11 @@ const isValid = function (value) {
     return true
 }
 
+const typeString = function(value){
+    if(typeof value !== "string") return false
+    return true
+}
+
 const createUser = async function (req, res) {
     try {
         data = req.body
@@ -17,21 +22,23 @@ const createUser = async function (req, res) {
             const { title, name, phone, email, password, address: { street, city, pincode } } = data
 
             if (!isValid(title)) {
-                return res.status(400).send({ status: false, msg: "title is not valid" })
+                return res.status(400).send({ status: false, msg: "title is not valid/title is missing" })
             }
+
+
             if (!isValid(name)) {
-                return res.status(400).send({ status: false, msg: "name is not valid" })
+                return res.status(400).send({ status: false, msg: "name is not valid/name is missing" })
             }
 
             if (!isValid(phone)) {
-                return res.status(400).send({ status: false, msg: "phone is not valid" })
+                return res.status(400).send({ status: false, msg: "phone is not valid/phone is missing" })
             }
 
             if (!isValid(email)) {
-                return res.status(400).send({ status: false, msg: "email is not valid" })
+                return res.status(400).send({ status: false, msg: "email is not valid/email is missing" })
             }
             if (!isValid(password)) {
-                return res.status(400).send({ status: false, msg: "password is not valid" })
+                return res.status(400).send({ status: false, msg: "password is not valid/password is missing" })
             }
             if (!isValid(street)) {
                 return res.status(400).send({ status: false, msg: "street is not valid" })

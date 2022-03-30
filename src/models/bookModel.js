@@ -1,3 +1,4 @@
+const moment = require("moment")
 const mongoose = require("mongoose")
 const objectId = mongoose.Schema.Types.ObjectId
 
@@ -14,7 +15,7 @@ const bookSchema = new mongoose.Schema({
     userId:{
         type:objectId,
         ref : "user",
-        required : true
+        required : [true, "userId is missing"]
 
     },
     ISBN : {
@@ -35,8 +36,8 @@ const bookSchema = new mongoose.Schema({
         type : Number,
         default :0
        
-       
     },
+    
     deletedAt :{
         type:Date,
         default:null
@@ -46,8 +47,9 @@ const bookSchema = new mongoose.Schema({
         default : false
     },
     releasedAt :{
-        type:Date,
-        required:true
+        type:String,
+        required:true,
+        match : [/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/, "Pls provide valid date"]
     }
 }, {timestamps:true} )
 
