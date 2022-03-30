@@ -158,7 +158,7 @@ const getBookDetailsById = async function (req, res) {
             return res.status(400).send({ status: false, msg: "no book found/alredy deleted" })
         }
 
-        let reviewer = await reviewModel.find({ bookId: data, isDeleted: false })
+        let reviewer = await reviewModel.find({ bookId: data, isDeleted: false }).sort({rating:-1})
 
         const { ...data1 } = Book
         console.log(data1)

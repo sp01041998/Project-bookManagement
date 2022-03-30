@@ -171,7 +171,7 @@ const updateReview = async function (req, res) {
         )
 
         const bookdetailsafterUpdate = await bookModel.findById({ _id: bookId })
-        const allreviewrs = await reviewModel.find({ bookId: bookId })
+        const allreviewrs = await reviewModel.find({ bookId: bookId }).sort({rating:-1})
 
         const { ...data1 } = bookdetailsafterUpdate
         data1._doc.reviewsData = allreviewrs
