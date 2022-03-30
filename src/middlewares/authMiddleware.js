@@ -38,8 +38,8 @@ const authoriseUpdateAndDelete = async function (req, res, next) {
                 return res.status(404).send({ status: false, msg: "the book you are accessing is already deleted" })
             }
 
-            console.log(req.decodeToken)
-            console.log(check.userId)
+            // console.log(req.decodeToken)
+            // console.log(check.userId)
 
             if (check.userId.toString() !== req.decodeToken.userId.toString()) {
                 return res.status(404).send({ status: false, msg: "you are trying to change someone else profile" })
@@ -58,24 +58,26 @@ const authoriseUpdateAndDelete = async function (req, res, next) {
 
 }
 
-const authoriseCreate = async function (req, res,next) {
-    try{
 
-        userId=req.body.userId
-        if(userId){
-            if(userId !==req.decodeToken.userId){
-                return res.status(400).send({status : false, msg : "user id does not matches with user credentials"})
-                
+
+const authoriseCreate = async function (req, res, next) {
+    try {
+
+        userId = req.body.userId
+        if (userId) {
+            if (userId !== req.decodeToken.userId) {
+                return res.status(400).send({ status: false, msg: "user id does not matches with user credentials" })
+
             }
             next()
         }
 
-    }catch(err){
-        return res.status(500).send({status : false, msg : err.message})
+    } catch (err) {
+        return res.status(500).send({ status: false, msg: err.message })
     }
 
 }
 
 module.exports.authenticate = authenticate
 module.exports.authoriseUpdateAndDelete = authoriseUpdateAndDelete
-module.exports.authoriseCreate=authoriseCreate
+module.exports.authoriseCreate = authoriseCreate

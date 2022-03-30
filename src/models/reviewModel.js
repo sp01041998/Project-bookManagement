@@ -9,6 +9,7 @@ const createReview = new mongoose.Schema({
     },
     reviewedBy :{
         type : String,
+        trim:true,
     
         default : "Guest",
 
@@ -29,7 +30,8 @@ const createReview = new mongoose.Schema({
 
     },
     review: {
-        type: String
+        type: String,
+        trim:true
     },
     isDeleted : {
         type : Boolean,

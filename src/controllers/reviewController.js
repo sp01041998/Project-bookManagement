@@ -53,18 +53,33 @@ const reviewer = async function (req, res) {
             return res.status(400).send({ status: false, msg: "book id in params and book id in body both are different" })
         }
 
-        if (!isValid(reviewedBy)) {
-            return res.status(400).send({ status: false, msg: " reviewd by is missing" })
+        if(reviewedBy){
+            if (!isValid(reviewedBy)) {
+                return res.status(400).send({ status: false, msg: " reviewd by is missing" })
+            }
+
         }
+
+        
         // if(!isValid(reviewedAt)){
         //     return res.status(400).send({status : false, msg : "reviewedAt is missing"})
         // }
+
         if (!isValid(rating)) {
             return res.status(400).send({ status: false, msg: "rating is missing" })
         }
-        if (!isValid(review)) {
-            return res.status(400).send({ status: false, msg: "rating is missing" })
+
+        if(rating>5 || rating<1){
+            return res.status(400).send({status : false, mag : "rating should be in between 1 to 5"})
         }
+        
+        if(review){
+            if (!isValid(review)) {
+                return res.status(400).send({ status: false, msg: "rating is missing" })
+            }
+
+        }
+        
 
 
         const checkbookIdexist = await bookModel.findOne({ _id: bookId, isDeleted: false })
@@ -166,9 +181,17 @@ const updateReview = async function (req, res) {
         }
 
         const updatedReview = await reviewModel.findOneAndUpdate(
-            { _id: reviewId },
+            { _id: reviewId , bookId:bookId},
             { $set: { reviewedBy: obj.reviewedBy, rating: obj.rating, review: obj.review } },
+            {new:true}
         )
+
+        console.log(updatedReview)
+        
+        if(!updatedReview){
+            return res.status(400).send({status:false, msg : "review id is not associated with book id"})
+
+        }
 
         const bookdetailsafterUpdate = await bookModel.findById({ _id: bookId })
         const allreviewrs = await reviewModel.find({ bookId: bookId }).sort({rating:-1})
@@ -227,11 +250,15 @@ const deleteReview = async function(req, res){
 
 
        const deletedReview = await reviewModel.findOneAndUpdate(
-           {_id : reviewId},
+           {_id : reviewId,bookId:bookId},
            {$set : {isDeleted:true}}
 
 
        )
+
+       if(!deletedReview){
+           return res.status(400).send({status :false, msg : "review id is not associated with book id" })
+       }
 
        const decreaseReviewValue = await bookModel.findOneAndUpdate(
            {_id : bookId},
@@ -239,7 +266,7 @@ const deleteReview = async function(req, res){
            {new : true}
        )
 
-       return res.status(200).send({status : true, msg : "Updated", data:decreaseReviewValue })
+       return res.status(200).send({status : true, msg : "review deleted", data:decreaseReviewValue })
 
        
         
