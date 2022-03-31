@@ -89,6 +89,8 @@ const createBook = async function (req, res) {
             if (!isValid(subCategory)) {
                 return res.status(400).send({ status: false, msg: 'sub Category is missing/invalid' })
             }
+            
+            //releasedAT validation 
 
             if (!isValid(releasedAt)) {
                 return res.status(400).send({ status: false, msg: 'release date is missing/invalid' })
