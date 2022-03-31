@@ -116,7 +116,7 @@ const createBook = async function (req, res) {
 const getBooks = async function (req, res) {
     try {
         data = req.query
-        console.log(data)
+       // console.log(data)
         const filter = {}
         filter.isDeleted = false
 
@@ -260,7 +260,7 @@ const updateBooks = async function (req, res) {
                 return res.status(400).send({ status: false, msg: "ISBN is not in vlid format" })
             }
 
-            checkIsbnIsUnique = await bookModel.find({ ISBN: ISBN })
+            let checkIsbnIsUnique = await bookModel.find({ ISBN: ISBN })
             if (checkIsbnIsUnique.length > 0) {
                 return res.status(400).send({ status: false, msg: "ISBN you want to update is already taken" })
             }

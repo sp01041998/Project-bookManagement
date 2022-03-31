@@ -10,11 +10,15 @@ let authenticate = async function (req, res, next) {
             return res.status(404).send({ status: false, msg: "token is not present in header" })
         }
 
-        let decodeToken = jwt.verify(token, "Ronaldo-007")
-        if (!decodeToken) {
-            return res.status(401).send({ status: false, msg: "invalid token" })
+        let decodeToken = jwt.verify(token, "Ronaldo-007", {ignoreExpiration: true})
+        let exp = decodeToken.exp
+        let iatNow = Math.floor(Date.now() / 1000)
+        if(exp<iatNow) {
+            return res.status(401).send({status:false,msg:'Token is expired now'})
 
         }
+       
+        
         req.decodeToken = decodeToken
         next()
 
