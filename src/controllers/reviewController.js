@@ -97,7 +97,7 @@ const reviewer = async function (req, res) {
         )
 
 
-        return res.status(200).send({ status: true, msg: "reviewed", data: reviewGenerated })
+        return res.status(201).send({ status: true, msg: "reviewed", data: reviewGenerated })
 
     } catch (err) {
         return res.status(500).send({ status: false, msg: err.message })

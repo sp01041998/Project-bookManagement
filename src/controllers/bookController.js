@@ -147,7 +147,7 @@ const getBooks = async function (req, res) {
         const bookList = await bookModel.find(filter).select({ _id: 1, title: 1, excerpt: 1, category: 1, reviews: 1, releasedAt: 1 }).sort({ title: 1 })
 
         if (bookList.length == 0) {
-            return res.status(400).send({ status: false, msg: "nothing is found, pls change your filter value" })
+            return res.status(404).send({ status: false, msg: "nothing is found, pls change your filter value" })
         }
 
         return res.status(200).send({ status: false, msg: "Books List", data: bookList })
@@ -179,7 +179,7 @@ const getBookDetailsById = async function (req, res) {
         let Book = await bookModel.findOne({ _id: data, isDeleted: false })
         // console.log(bookDetails)
         if (!Book) {
-            return res.status(400).send({ status: false, msg: "no book found/alredy deleted" })
+            return res.status(404).send({ status: false, msg: "no book found/alredy deleted" })
         }
 
         let reviewer = await reviewModel.find({ bookId: data, isDeleted: false }).sort({ rating: -1 })
