@@ -94,6 +94,10 @@ const createBook = async function (req, res) {
                 return res.status(400).send({ status: false, msg: 'release date is missing/invalid' })
             }
 
+            if(!/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/.test(releasedAt)){
+                return res.status(400).send({status : false, msg:"Date is expected to be in YYYY-MM-DD format"})
+            }
+
 
             const bookCreated = await bookModel.create(data)
 

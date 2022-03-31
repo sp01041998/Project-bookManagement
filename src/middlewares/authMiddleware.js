@@ -46,7 +46,7 @@ const authoriseUpdateAndDelete = async function (req, res, next) {
             // console.log(check.userId)
 
             if (check.userId.toString() !== req.decodeToken.userId.toString()) {
-                return res.status(404).send({ status: false, msg: "you are trying to change someone else profile" })
+                return res.status(403).send({ status: false, msg: "you are trying to change someone else profile" })
 
             }
 
@@ -70,7 +70,7 @@ const authoriseCreate = async function (req, res, next) {
         userId = req.body.userId
         if (userId) {
             if (userId !== req.decodeToken.userId) {
-                return res.status(400).send({ status: false, msg: "user id does not matches with user credentials" })
+                return res.status(403).send({ status: false, msg: "user id does not matches with user credentials" })
 
             }
             next()
