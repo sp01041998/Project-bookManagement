@@ -28,6 +28,8 @@ router.put("/books/:bookId" , authMiddleware.authenticate,   authMiddleware.auth
 
 router.delete("/books/:bookId", authMiddleware.authenticate, authMiddleware.authoriseUpdateAndDelete,   bookController.deleteBooks)
 
+router.post("/books/:bookId/url", authMiddleware.authenticate, authMiddleware.authoriseUpdateAndDelete, bookController.insertBookCover)
+
 
 
 router.post("/books/:bookId/review", reviewController.reviewer)

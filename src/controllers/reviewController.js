@@ -7,6 +7,7 @@ const { send } = require("express/lib/response")
 const isValid = function (value) {
     if (typeof value === 'undefined' || value === null) return false
     if (typeof value === 'string' && value.trim().length === 0) return false
+    if(typeof value ==='number' && value.toString().trim.length()===0) return false
     return true
 }
 
@@ -55,7 +56,7 @@ const reviewer = async function (req, res) {
 
         if(reviewedBy){
             if (!isValid(reviewedBy)) {
-                return res.status(400).send({ status: false, msg: " reviewd by is missing" })
+                return res.status(400).send({ status: false, msg: "reviewd by is missing" })
             }
 
         }

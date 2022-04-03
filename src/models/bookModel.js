@@ -50,7 +50,11 @@ const bookSchema = new mongoose.Schema({
         type:String,
         required:true,
         match : [/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/, "Pls provide valid date"]
+    },
+    bookCover : {
+        type : String
     }
+
 }, {timestamps:true} )
 
 module.exports=mongoose.model('book', bookSchema)
